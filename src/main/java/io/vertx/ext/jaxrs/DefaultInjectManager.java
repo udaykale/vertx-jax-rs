@@ -42,17 +42,16 @@ final class DefaultInjectManager implements InjectManager {
         return new DefaultInjectManager(typeAndSingletons, allClasses);
     }
 
-    @Override
-    public <T> T getInstance(Class<T> clazz) throws InjectManagerException {
+    @Override public <T> T getInstance(Class<T> clazz) throws InjectManagerException {
 
         if (clazz == null) throw new IllegalArgumentException("Argument clazz cannot be null");
 
         if (allClasses.contains(clazz)) {
             Object singleton = singletons.get(clazz);
 
-            if (singleton != null) {
+            if (singleton != null)
                 return clazz.cast(singleton);
-            } else {
+            else {
                 try {
                     return clazz.newInstance();
                 } catch (InstantiationException | IllegalAccessException e) {

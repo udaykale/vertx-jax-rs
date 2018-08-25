@@ -15,7 +15,7 @@ public class VertxJaxRSTest {
     public void mainTest() throws InjectManagerException, VertxJaxRSParseException {
 
         Application application = new VertxApplication();
-        VertxJaxRSApplicationConf conf = VertxJaxRSApplicationConf.of(application, Vertx.vertx(), 8080);
-        VertxJaxRS.of(conf).start();
+//        VertxJaxRSApplicationConf conf = VertxJaxRSApplicationConf.of(application, Vertx.vertx(), 8080);
+//        VertxJaxRS.of(conf).start();
     }
 }

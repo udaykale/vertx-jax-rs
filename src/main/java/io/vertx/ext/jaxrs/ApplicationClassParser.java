@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
-import javax.ws.rs.core.Feature;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.List;
@@ -40,6 +39,8 @@ class ApplicationClassParser {
         String finalBasePath = basePath.trim().isEmpty() ? "/" : basePath;
         Router baseRouter = Router.router(vertx);
 
+        // TODO: Mount a router that generates the base request id.
+
         for (Class<?> cl : injectManager.getAllClasses()) {
             try {
                 RootResourceClassParser.parse(cl, vertx, injectManager)
@@ -55,7 +56,14 @@ class ApplicationClassParser {
         return baseRouter;
     }
 
-    private static <T> void validate(Class<T> clazz) throws VertxJaxRSParseException {
+    /**
+     * Validates the class annotated with @ApplicationPath and implements Application class.
+     *
+     * @param clazz Class to parse. Must be a sub-class of {@link Application}
+     * @param <T>   The type of class to parse. Must be a sub-class of {@link Application}
+     * @throws VertxJaxRSParseException The given class was not sub-type of Application Class or Some error in parsing.
+     */
+    private static <T extends Application> void validate(Class<T> clazz) throws VertxJaxRSParseException {
 
         Annotation[] annotations = clazz.getAnnotations();
 
@@ -64,9 +72,9 @@ class ApplicationClassParser {
                 .collect(Collectors.toList());
 
         if (applicationPathAnnotation.size() != 1) {
-            String message = String.format("Class %s cannot have more than one @ApplicationPath annotations",
+            String msg = String.format("Class %s cannot have more than one @ApplicationPath annotations",
                     clazz.getCanonicalName());
-            throw new VertxJaxRSParseException(message);
+            throw new VertxJaxRSParseException(msg);
         }
     }
 }

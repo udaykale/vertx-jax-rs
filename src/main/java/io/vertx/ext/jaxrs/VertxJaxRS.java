@@ -55,29 +55,27 @@ public final class VertxJaxRS {
     public synchronized void start() {
         if (httpServer == null) {
             LOG.info("Starting server at port {}", port);
-            httpServer = vertx.createHttpServer().requestHandler(baseRouter::accept).listen(port, asyncResult -> {
-                if (asyncResult.failed() || asyncResult.result() == null) {
-                    LOG.error("Failed to start server", asyncResult.cause());
-                } else {
-                    LOG.info("Successfully started server on port {}", port);
-                }
-            });
-        } else {
+
+            httpServer = vertx.createHttpServer().requestHandler(baseRouter::accept)
+                    .listen(port, asyncResult -> {
+                        if (asyncResult.failed() || asyncResult.result() == null)
+                            LOG.error("Failed to start server", asyncResult.cause());
+                        else
+                            LOG.info("Successfully started server on port {}", port);
+                    });
+        } else
             LOG.error("Server is already running.");
-        }
     }
 
     public synchronized void stop() {
         if (httpServer != null) {
             httpServer.close(asyncResult -> {
-                if (asyncResult.failed() || asyncResult.result() == null) {
+                if (asyncResult.failed() || asyncResult.result() == null)
                     LOG.error("Failed to close server", asyncResult.cause());
-                } else {
+                else
                     LOG.info("Successfully closed server on port {}", port);
-                }
             });
-        } else {
+        } else
             LOG.info("Server is already closed.");
-        }
     }
 }

@@ -15,7 +15,6 @@ import java.util.Set;
  * The implementation may cache the instance of implementation of this class.
  */
 public interface InjectManager {
-
     /**
      * Get the instance of a class.
      * InjectManagerException exception is thrown when:
