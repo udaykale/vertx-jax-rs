@@ -56,7 +56,8 @@ public final class VertxJaxRS {
         if (httpServer == null) {
             LOG.info("Starting server at port {}", port);
 
-            httpServer = vertx.createHttpServer().requestHandler(baseRouter::accept)
+            httpServer = vertx.createHttpServer()
+                    .requestHandler(baseRouter::accept)
                     .listen(port, asyncResult -> {
                         if (asyncResult.failed() || asyncResult.result() == null)
                             LOG.error("Failed to start server", asyncResult.cause());

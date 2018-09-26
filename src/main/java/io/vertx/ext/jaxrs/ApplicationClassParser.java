@@ -31,7 +31,7 @@ class ApplicationClassParser {
      * @throws VertxJaxRSParseException The given class was not sub-type of Application Class or Some error in parsing.
      */
     static <T extends Application> Router parse(Class<T> clazz, Vertx vertx, InjectManager injectManager)
-            throws VertxJaxRSParseException {
+            throws VertxJaxRSParseException, InjectManagerException {
 
         validate(clazz);
         // Fetch the base path from @ApplicationPath
@@ -43,13 +43,11 @@ class ApplicationClassParser {
 
         for (Class<?> cl : injectManager.getAllClasses()) {
             try {
-                RootResourceClassParser.parse(cl, vertx, injectManager)
-                        .forEach(router -> baseRouter.mountSubRouter(finalBasePath, router));
-                NonRootResourceClassParser.parse(cl, vertx, injectManager)
-                        .forEach(router -> baseRouter.mountSubRouter(finalBasePath, router));
+                Router router = ResourceClassParser.parse(cl, vertx, injectManager);
+                baseRouter.mountSubRouter(finalBasePath, router);
                 // TODO: @Feature and @Provider classes
-            } catch (ClassPathAnnotationNotFoundException | MethodPathAnnotationNotFoundException e) {
-                // Ignore
+            } catch (ClassPathAnnotationNotFoundException e) {
+                // TODO: Debug log
             }
         }
 

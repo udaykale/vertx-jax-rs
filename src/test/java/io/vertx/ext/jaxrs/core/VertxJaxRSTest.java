@@ -5,17 +5,17 @@ import io.vertx.ext.jaxrs.InjectManagerException;
 import io.vertx.ext.jaxrs.VertxJaxRS;
 import io.vertx.ext.jaxrs.VertxJaxRSApplicationConf;
 import io.vertx.ext.jaxrs.VertxJaxRSParseException;
-import org.junit.Test;
 
 import javax.ws.rs.core.Application;
 
 public class VertxJaxRSTest {
 
-    @Test
-    public void mainTest() throws InjectManagerException, VertxJaxRSParseException {
+    public static void main(String[] args) throws InjectManagerException, VertxJaxRSParseException {
 
+        int port = 8080;
+        Vertx vertx = Vertx.vertx();
         Application application = new VertxApplication();
-//        VertxJaxRSApplicationConf conf = VertxJaxRSApplicationConf.of(application, Vertx.vertx(), 8080);
-//        VertxJaxRS.of(conf).start();
+        VertxJaxRSApplicationConf conf = VertxJaxRSApplicationConf.of(port);
+        VertxJaxRS.of(application, vertx, conf).start();
     }
 }
